@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Візуалізація GPS вимірювань</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f4f6f9;
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 10px;
+        }
+
+        .top-panel {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            flex: 1;
+            min-width: 320px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 14px;
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+
+        #status {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #chart {
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-top: 20px;
+        }
+
+        .positions-panel {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .position-box {
+            background: white;
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            flex: 1;
+            min-width: 280px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            max-height: 260px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Додаток для візуалізації вимірювань GPS</h1>
+
+    <div class="top-panel">
+        <div class="card">
+            <h2>Стан системи</h2>
+            <div id="status">Завантаження...</div>
+            <div id="satelliteCount">Кількість валідних супутників: 0</div>
+            
+            <h3>Останнє повідомлення</h3>
+            <pre id="lastMessage">Немає даних</pre>
+        </div>
+
+        <div class="card">
+            <h2>Налаштування GPS емулятора</h2>
+            <form id="configForm">
+                <label for="emulationZoneSize">emulationZoneSize</label>
+                <input type="number" id="emulationZoneSize" value="200">
+
+                <label for="messageFrequency">messageFrequency</label>
+                <input type="number" id="messageFrequency" value="1">
+
+                <label for="satelliteSpeed">satelliteSpeed (км/год)</label>
+                <input type="number" id="satelliteSpeed" value="100">
+
+                <label for="objectSpeed">objectSpeed (км/год)</label>
+                <input type="number" id="objectSpeed" value="10">
+
+                <button type="submit">Застосувати параметри</button>
+            </form>
+
+            <h3>Результат конфігурації</h3>
+            <pre id="configResult">Ще не виконувалось</pre>
+        </div>
+    </div>
+
+    <div class="positions-panel">
+        <div class="position-box">
+            <h3>Координати об'єкта (аналітичний метод)</h3>
+            <div id="analyticCoords">Ще не обчислено</div>
+        </div>
+
+        <div class="position-box">
+            <h3>Координати об'єкта (чисельний метод)</h3>
+            <div id="numericCoords">Ще не обчислено</div>
+        </div>
+    </div>
+
+    <div id="chart"></div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
